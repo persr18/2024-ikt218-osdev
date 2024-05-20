@@ -33,3 +33,4 @@ void itos(int integer, char *string);
 void printf(const char *str, ...);
 void scrollUp();
 void newLine();
+void drawCake();

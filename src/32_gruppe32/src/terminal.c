@@ -64,6 +64,12 @@ void terminalWrite(const char *string)
             *ptr++;
             continue;
         }
+        if (*ptr == '\r')
+        {
+            col = 0;
+            *ptr++;
+            continue;
+        }
         vid[row * width + col] = *ptr | selectedColor;
         *ptr++;
         col++;
@@ -75,6 +81,8 @@ void terminalWrite(const char *string)
     move_cursor(col, row);
     return;
 }
+
+
 
 // Function to clear screen. Basically writes blank space to every field on the grid/screen.
 void clearScreen()
@@ -223,4 +231,42 @@ void printf(const char *str, ...)
         }
     }
     va_end(ptr);
+}
+
+
+void drawCake() {
+    setColors(0, 0);
+    printf("         ");
+    setColors(15, 0);
+    printf(" ");
+    setColors(0, 0);
+    printf("  ");
+    setColors(15, 0);
+    printf(" ");
+    printf("\n");
+
+    setColors(0, 0);
+    printf("       ");
+    setColors(7, 0);
+    printf("        ");
+    printf("\n");
+
+    setColors(0, 0);
+    printf("     ");
+    setColors(5, 0);
+    printf("            ");
+    printf("\n");
+
+    setColors(0, 0);
+    printf("   ");
+    setColors(12, 0);
+    printf("                ");
+    printf("\n");
+
+    setColors(0, 0);
+    printf(" ");
+    setColors(14, 0);
+    printf("                    ");
+    printf("\n");
+    setColors(BLACK, GRAY);
 }
