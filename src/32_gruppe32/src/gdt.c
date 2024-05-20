@@ -1,4 +1,4 @@
-// Inspired by OsDev.org and OliveStem on Youtube(https://www.youtube.com/@olivestemlearning)
+// The implementation of GDT is inspired by OsDev.org and OliveStem on Youtube (https://www.youtube.com/@olivestemlearning)
 
 #include <libc/stdint.h>
 #include <gdt.h>
