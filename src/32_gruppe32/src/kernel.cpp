@@ -46,7 +46,6 @@ void operator delete[](void *ptr, size_t size) noexcept
 int kernel_main()
 {
 
-    
     terminalWrite("We are now in CPP kernel.\n");
     // Allocate some memory using the kernel memory manager
     // THIS IS PART OF THE ASSIGNMENT
@@ -55,13 +54,15 @@ int kernel_main()
     void *memory3 = malloc(13331);
     char *memory4 = new char[1000]();
 
-    Song *songs[] = { new Song({music_1, sizeof(music_1) / sizeof(Note)}), 
-    new Song({music_2, sizeof(music_2) / sizeof(Note)}),
-    new Song({music_2, sizeof(music_3) / sizeof(Note)}),
-    new Song({music_2, sizeof(music_4) / sizeof(Note)}),
-    new Song({music_2, sizeof(music_5) / sizeof(Note)}),
-    new Song({music_2, sizeof(music_6) / sizeof(Note)}),
-    new Song({music_2, sizeof(music_7) / sizeof(Note)})};
+    Song *songs[] = {
+        new Song({music_1, sizeof(music_1) / sizeof(Note)}),
+        new Song({music_2, sizeof(music_2) / sizeof(Note)}),
+        new Song({music_3, sizeof(music_3) / sizeof(Note)}),
+        new Song({music_4, sizeof(music_4) / sizeof(Note)}),
+        new Song({music_5, sizeof(music_5) / sizeof(Note)}),
+        new Song({music_6, sizeof(music_6) / sizeof(Note)}),
+        new Song({music_7, sizeof(music_7) / sizeof(Note)}),
+        new Song({music_8, sizeof(music_8) / sizeof(Note)})};
     uint32_t n_songs = sizeof(songs) / sizeof(Song *);
 
     SongPlayer *player = create_song_player();
@@ -73,7 +74,7 @@ int kernel_main()
         // printf("\nPlaying a total of %d songs\n", n_songs);
         for (uint32_t i = 0; i < n_songs; i++)
         {
-            printf("\nPlaying song nr: %d of %d\n", i+1, n_songs);
+            printf("\nPlaying song nr: %d of %d\n", i + 1, n_songs);
             player->play_song(songs[i]);
         }
         break;
