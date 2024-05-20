@@ -1,4 +1,4 @@
-// The implementation of GDT is inspired by OsDev.org and OliveStem on Youtube (https://www.youtube.com/@olivestemlearning)
+// Inspired by OsDev.org and OliveStem on Youtube(https://www.youtube.com/@olivestemlearning)
 
 #include <libc/stdint.h>
 #include <gdt.h>
@@ -7,7 +7,6 @@ extern void flush_gdt(addr_t);
 
 struct gdt_entry gdt_entries[5];
 struct gdt_pointer gdt_ptr;
-
 
 void createGdtEntry(uint32_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
 {

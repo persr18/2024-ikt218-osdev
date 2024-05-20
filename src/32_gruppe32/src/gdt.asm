@@ -1,4 +1,4 @@
-; The implementation of GDT is inspired by OsDev.org and OliveStem on Youtube (https://www.youtube.com/@olivestemlearning)
+;Inspired by OsDev.org and OliveStem on Youtube(https://www.youtube.com/@olivestemlearning)
 
 global flush_gdt
 
