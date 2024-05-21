@@ -127,9 +127,9 @@ void play_song_impl(Song *song)
     int progress = 0;
     for (uint32_t i = 0; i < song->length; i++)
     {
-        progress = (100 * (i+1)) / song->length;
+        progress = (100 * (i + 1)) / song->length;
         Note *note = &song->notes[i];
-        printf("\rNote: %d,   Freq=%d,   Sleep=%d   Progress=(%d/100)       ", i, note->frequency, note->duration, progress);
+        printf("\rNote: %d,   Freq=%d,   Sleep=%d,   Progress=(%d/100)       ", i, note->frequency, note->duration, progress);
         play_sound(note->frequency);
         sleep_interrupt(note->duration);
         disable_speaker();

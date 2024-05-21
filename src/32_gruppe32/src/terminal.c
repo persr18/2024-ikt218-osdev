@@ -8,6 +8,7 @@ int row = 0;
 
 // Setting pointer to start of video memory.
 uint16_t *const vid = (uint16_t *const)0xB8000;
+
 // Setting default color scheme, gray on black.
 uint16_t const defaultColor = (BLACK << 12) | (GRAY << 8);
 uint16_t selectedColor = defaultColor;
@@ -56,7 +57,7 @@ void terminalWrite(const char *string)
 {
     char *ptr = string;
 
-    while (*ptr != 0x00 && *ptr != '\0')
+    while (*ptr != '\0')
     {
         if (*ptr == '\n')
         {
@@ -73,16 +74,10 @@ void terminalWrite(const char *string)
         vid[row * width + col] = *ptr | selectedColor;
         *ptr++;
         col++;
-        if (col == width)
-        {
-            newLine();
-        }
     }
     move_cursor(col, row);
     return;
 }
-
-
 
 // Function to clear screen. Basically writes blank space to every field on the grid/screen.
 void clearScreen()
@@ -233,8 +228,8 @@ void printf(const char *str, ...)
     va_end(ptr);
 }
 
-
-void drawCake() {
+void drawCake()
+{
     setColors(0, 0);
     printf("         ");
     setColors(15, 0);
