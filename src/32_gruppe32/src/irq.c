@@ -16,12 +16,12 @@ void irq_handler(registers_t r)
 {
     if (r.int_no >= 40)
     {
-        // Send reset signal to slave.
+        
         outb(PIC_SEC_CONTROL, 0x20);
     }
-    // Send reset signal to master. (As well as slave, if necessary).
+  
     outb(PIC_MAIN_CONTROL, 0x20);
-    // printf("Interrupt: %d", r.int_no);
+  
     if (interrupt_handlers[r.int_no] != 0)
     {
         isr_t handler = interrupt_handlers[r.int_no];
