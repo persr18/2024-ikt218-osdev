@@ -1,3 +1,5 @@
+// The implementatio of interrups is inspired by different sources, and tutorials from OSDev
+
 #include <isr.h>
 #include <io.h>
 #include <terminal.h>

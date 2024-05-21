@@ -32,6 +32,7 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
     printf("GDT initialized\n");
 
     initIdt();
+
     printf("IDT initialized\n");
 
     initIrq();
