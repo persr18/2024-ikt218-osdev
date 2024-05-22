@@ -47,7 +47,7 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
     initPit();
     printf("PIT initialized with target frequency of %d Hz\n", TARGET_FREQUENCY);
 
-    /* int counter = 0;
+    int counter = 0;
     while (true)
     {
         printf("[%d]: Sleeping with busy-waiting (HIGH CPU).\n", counter);
@@ -57,7 +57,7 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
         printf("[%d]: Sleeping with interrupts (LOW CPU).\n", counter);
         sleep_interrupt(1000);
         printf("[%d]: Slept using interrupts.\n", counter++);
-    }; */
+    }; 
 
     setColors(RED, 20);
     setColors(BLACK, GRAY);

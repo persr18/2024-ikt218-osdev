@@ -32,13 +32,14 @@ void sleep_busy(uint32_t milliseconds) {
     }
 }
 
-void sleep_interrupt(uint32_t milliseconds) {
-    uint32_t current_ticks = ticks;
+void sleep_interrupt(uint32_t milliseconds){
+    uint32_t current_tick = ticks;
     uint32_t ticks_to_wait = milliseconds * TICKS_PER_MS;
-    uint32_t end_ticks = current_ticks + ticks_to_wait;
+    uint32_t end_ticks = current_tick + ticks_to_wait;
 
-    while (current_ticks < end_ticks) {
-        wait_for_interrupt();
-        current_ticks = ticks;
+    while (current_tick < end_ticks) {
+        asm volatile("sti"); // Enable interrupts (sti)
+        asm volatile("hlt"); // Halt the CPU until the next interrupt (hlt)
+        current_tick = ticks;
     }
 }
