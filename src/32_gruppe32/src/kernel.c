@@ -44,7 +44,7 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
 
     print_memory_layout();
 
-    initPit(TARGET_FREQUENCY);
+    initPit();
     printf("PIT initialized with target frequency of %d Hz\n", TARGET_FREQUENCY);
 
     /* int counter = 0;
