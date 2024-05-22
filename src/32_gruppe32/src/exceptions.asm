@@ -3,12 +3,11 @@ extern irq_handler
 global isr_stub_table
 global irq_stub_table
 
-
 isr_common_stub:
     pusha
-    mov ax, ds ; Lower 16-bits of eax = ds.
-	push eax ; save the data segment descriptor
-	mov ax, 0x10  ; kernel data segment descriptor
+    mov ax, ds 		; This is the lower 16-bits of eax = ds.
+	push eax 		; The data segment descriptor is saved
+	mov ax, 0x10  	; Kernel data segment descriptor
 	mov ds, ax
 	mov es, ax
 	mov fs, ax
@@ -24,15 +23,15 @@ isr_common_stub:
 	mov fs, ax
 	mov gs, ax
 	popa
-	add esp, 8 ; Cleans up the pushed error code and pushed ISR number
+	add esp, 8 ; Cleaning the pushed IRS error code 
 	sti
-	iret ; pop
+	iret
 
 irq_common_stub:
 	pusha
-    mov ax, ds ; Lower 16-bits of eax = ds.
-	push eax ; save the data segment descriptor
-	mov ax, 0x10  ; kernel data segment descriptor
+    mov ax, ds
+	push eax
+	mov ax, 0x10  
 	mov ds, ax
 	mov es, ax
 	mov fs, ax
@@ -48,9 +47,9 @@ irq_common_stub:
 	mov fs, ax
 	mov gs, ax
 	popa
-	add esp, 8 ; Cleans up the pushed error code and pushed ISR number
+	add esp, 8 	; Cleaning the pushed IRQ error code
 	sti
-	iret ; pop
+	iret
 
 
 %macro isr_err_stub 1
