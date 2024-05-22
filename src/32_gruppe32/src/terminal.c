@@ -3,14 +3,16 @@
 #include "libc/stdarg.h"
 #include "libc/stdbool.h"
 
-int col = 0;
-int row = 0;
+// Setting current position of cursor.
+int col, row = 0;
 
-// Setting pointer to start of video memory.
-uint16_t *const vid = (uint16_t *const)0xB8000;
+// Creating a pointer to the start of the video memory.
+uint16_t *const video = (uint16_t *const)0xB8000;
 
-// Setting default color scheme, gray on black.
+// Defining default color by combining background and text color values.
 uint16_t const defaultColor = (BLACK << 12) | (GRAY << 8);
+
+// Setting selected color to default color.
 uint16_t selectedColor = defaultColor;
 
 void monitorInitialize()
@@ -19,19 +21,27 @@ void monitorInitialize()
 
 // Function to set color.
 // Ensures that color codes used are within valid range.
+
+/// @brief takes in two color values and sets the background and text color to these values.
+/// @param background 
+/// @param text 
 void setColors(uint16_t background, uint16_t text)
 {
+    // Check if color codes are within valid range.
     if (background > 0xF)
     {
         terminalWrite("Background color out of range\n");
+        // If not, return.
         return;
     }
+    // Check if color codes are within valid range.
     if (text > 0xF)
     {
         terminalWrite("Text color out of range\n");
+        // If not, return.
         return;
     }
-
+    // Set selected color to the combined color values.
     selectedColor = (background << 12) | (text << 8);
 }
 
@@ -41,40 +51,51 @@ void disable_cursor()
     outb(0x3D5, 0x20);
 }
 
+/// @brief moves the cursor to the specified position.
+/// @param x 
+/// @param y 
 void move_cursor(int x, int y)
 {
+    // Calculate the position of the cursor.
     uint16_t pos = y * width + x;
-
     outb(0x3D4, 0x0F);
     outb(0x3D5, (uint8_t)(pos & 0xFF));
     outb(0x3D4, 0x0E);
     outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
 }
 
-// Function to write to screen. Takes in a string and writes it on the screen.
-// If the string contains a newline, the newLine function is called.
+
+/// @brief writes a string to the screen.
+/// @param string 
 void terminalWrite(const char *string)
 {
+    // Create a pointer to the start of the string.
     char *ptr = string;
 
+    // Loop through the string.
     while (*ptr != '\0')
     {
+        // Check if the character is a newline character.
         if (*ptr == '\n')
         {
             newLine();
             *ptr++;
             continue;
         }
+        // Check if the character is a carriage return character.
         if (*ptr == '\r')
         {
+            // Move the cursor to the start of the row.
             col = 0;
             *ptr++;
             continue;
         }
-        vid[row * width + col] = *ptr | selectedColor;
+        // Write the character to the screen at the current position.
+        video[row * width + col] = selectedColor | *ptr;
         *ptr++;
         col++;
     }
+    // move the cursor to the new position.
     move_cursor(col, row);
     return;
 }
@@ -82,20 +103,25 @@ void terminalWrite(const char *string)
 // Function to clear screen. Basically writes blank space to every field on the grid/screen.
 void clearScreen()
 {
+    // Set row and col to top left corner.
     row = 0;
     col = 0;
-
+ 
+    // Loop through the screen.
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            vid[y * width + x] = ' ' | defaultColor;
+            // Write blank space to the current position.
+            video[y * width + x] = ' ' | defaultColor;
         }
     }
+    // Move cursor to top left corner.
     move_cursor(col, row);
 }
 
 // Function to begin new line. Starts writing from left on the row below current. If that is outside of screen size, invokes scroll function.
+/// @brief moves the cursor to the start of the next row.
 void newLine()
 {
     col = 0;
@@ -111,19 +137,18 @@ void newLine()
 void scrollUp()
 {
     row--;
-
     for (int y = 0; y < height - 1; y++)
     {
         for (int x = 0; x < width; x++)
         {
 
-            vid[y * width + x] = vid[(y + 1) * width + x];
+            video[y * width + x] = video[(y + 1) * width + x];
         }
     }
 
     for (int x = 0; x < width; x++)
     {
-        vid[(height - 1) * width + x] = ' ' | defaultColor;
+        video[(height - 1) * width + x] = ' ' | defaultColor;
     }
 
     move_cursor(col, row);
@@ -180,7 +205,9 @@ char *citoa(int num, char *str, int base)
     return str;
 }
 
-// printf() implementation to print formatted strings.
+/// @brief printf function that takes in a string and a variable number of arguments.
+/// @param str 
+/// @param  
 void printf(const char *str, ...)
 {
     va_list ptr;
@@ -230,37 +257,37 @@ void printf(const char *str, ...)
 
 void drawCake()
 {
-    setColors(0, 0);
+    setColors(BLACK, BLACK);
     printf("         ");
-    setColors(15, 0);
+    setColors(WHITE, BLACK);
     printf(" ");
-    setColors(0, 0);
+    setColors(BLACK, BLACK);
     printf("  ");
-    setColors(15, 0);
+    setColors(WHITE, BLACK);
     printf(" ");
     printf("\n");
 
-    setColors(0, 0);
+    setColors(BLACK, BLACK);
     printf("       ");
-    setColors(7, 0);
+    setColors(GRAY, BLACK);
     printf("        ");
     printf("\n");
 
-    setColors(0, 0);
+    setColors(BLACK, BLACK);
     printf("     ");
-    setColors(5, 0);
+    setColors(PURPLE, BLACK);
     printf("            ");
     printf("\n");
 
-    setColors(0, 0);
+    setColors(BLACK, BLACK);
     printf("   ");
-    setColors(12, 0);
+    setColors(LIGHT_RED, BLACK);
     printf("                ");
     printf("\n");
 
-    setColors(0, 0);
+    setColors(BLACK, BLACK);
     printf(" ");
-    setColors(14, 0);
+    setColors(YELLOW, BLACK);
     printf("                    ");
     printf("\n");
     setColors(BLACK, GRAY);
