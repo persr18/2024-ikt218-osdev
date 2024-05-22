@@ -71,16 +71,10 @@ int kernel_main()
     drawCake();
     while (true)
     {
-        // printf("\nPlaying a total of %d songs\n", n_songs);
         for (uint32_t i = 0; i < n_songs; i++)
         {
             printf("\nPlaying song nr: %d of %d\n", i + 1, n_songs);
             player->play_song(songs[i]);
         }
-        break;
     };
-
-    // More code....
-    while (true)
-        ;
 }
