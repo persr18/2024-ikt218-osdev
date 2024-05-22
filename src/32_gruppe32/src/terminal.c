@@ -23,8 +23,8 @@ void monitorInitialize()
 // Ensures that color codes used are within valid range.
 
 /// @brief takes in two color values and sets the background and text color to these values.
-/// @param background 
-/// @param text 
+/// @param background
+/// @param text
 void setColors(uint16_t background, uint16_t text)
 {
     // Check if color codes are within valid range.
@@ -52,8 +52,8 @@ void disable_cursor()
 }
 
 /// @brief moves the cursor to the specified position.
-/// @param x 
-/// @param y 
+/// @param x
+/// @param y
 void move_cursor(int x, int y)
 {
     // Calculate the position of the cursor.
@@ -64,9 +64,8 @@ void move_cursor(int x, int y)
     outb(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
 }
 
-
 /// @brief writes a string to the screen.
-/// @param string 
+/// @param string
 void terminalWrite(const char *string)
 {
     // Create a pointer to the start of the string.
@@ -78,7 +77,12 @@ void terminalWrite(const char *string)
         // Check if the character is a newline character.
         if (*ptr == '\n')
         {
-            newLine();
+            col = 0;
+            row++;
+            if (row == height)
+            {
+                scrollUp();
+            }
             *ptr++;
             continue;
         }
@@ -106,7 +110,7 @@ void clearScreen()
     // Set row and col to top left corner.
     row = 0;
     col = 0;
- 
+
     // Loop through the screen.
     for (int y = 0; y < height; y++)
     {
@@ -117,19 +121,6 @@ void clearScreen()
         }
     }
     // Move cursor to top left corner.
-    move_cursor(col, row);
-}
-
-// Function to begin new line. Starts writing from left on the row below current. If that is outside of screen size, invokes scroll function.
-/// @brief moves the cursor to the start of the next row.
-void newLine()
-{
-    col = 0;
-    row++;
-    if (row == height)
-    {
-        scrollUp();
-    }
     move_cursor(col, row);
 }
 
@@ -155,8 +146,7 @@ void scrollUp()
 }
 
 // itoa() implementation from https://www.geeksforgeeks.org/implement-itoa/
-
-char *citoa(int num, char *str, int base)
+char *itoa(int num, char *str, int base)
 {
     int i = 0;
     bool isNegative = false;
@@ -206,8 +196,8 @@ char *citoa(int num, char *str, int base)
 }
 
 /// @brief printf function that takes in a string and a variable number of arguments.
-/// @param str 
-/// @param  
+/// @param str
+/// @param
 void printf(const char *str, ...)
 {
     va_list ptr;
@@ -215,38 +205,31 @@ void printf(const char *str, ...)
 
     for (int i = 0; str[i] != '\0'; i++)
     {
-        if (str[i] != '%' && str[i] != '\0')
+        if (str[i] != '%')
         {
-            char singleChar[2] = {str[i], '\0'};
-            terminalWrite(singleChar);
+            char Chars[2] = {str[i], '\0'};
+            terminalWrite(Chars);
         }
-
         else if (str[i] == '%' && (str[i + 1] == 'i' || str[i + 1] == 'd'))
         {
-            int num = va_arg(ptr, int);
             char digits[11];
-            citoa(num, digits, 10);
+            itoa(va_arg(ptr, int), digits, 10);
             terminalWrite(digits);
-
-            i = i + 1;
+            i++;
         }
         else if (str[i] == '%' && str[i + 1] == 's')
         {
             char *s = va_arg(ptr, char *);
             terminalWrite(s);
-
             i++;
         }
         else if (str[i] == '%' && str[i + 1] == 'x')
         {
-            int num = va_arg(ptr, int);
             char digits[9];
-            citoa(num, digits, 16);
+            itoa(va_arg(ptr, int), digits, 16);
             terminalWrite(digits);
-
-            i = i + 1;
+            i++;
         }
-
         else
         {
             break;
