@@ -1,3 +1,5 @@
+// The implementatio of interrups is inspired by different sources, and tutorials from OSDev
+
 #include <libc/stdint.h>
 #include <idt.h>
 #include <io.h>
@@ -36,32 +38,29 @@ void remapPIC()
     outb(PIC_SEC_DATA, a2);
 }
 
+void createIdtEntry(int index, void *offset, uint8_t attributes)
+{
+    idt_entries[index].offset_1 = (uint32_t)offset & 0xFFFF;
+    idt_entries[index].offset_2 = ((uint32_t)offset >> 16) & 0xFFFF;
+    idt_entries[index].selector = 0x08;
+    idt_entries[index].zero = 0;
+    idt_entries[index].type_attributes = attributes;
+}
+
 void initIdt()
 {
     idt_ptr.base = ((addr_t)&idt_entries);
-    idt_ptr.size = (sizeof(struct idt_entry) * 256) - 1;
+    idt_ptr.size = sizeof(idt_entries) - 1;
 
-    memset(&idt_entries, 0, sizeof(struct idt_entry) * 256);
-
+    memset(&idt_entries, 0, sizeof(idt_entries));
     remapPIC();
 
-    for (int i = 0; i < 32; i++)
-    {
+    for (int i = 0; i < 32; i++) {
         createIdtEntry(i, isr_stub_table[i], 0x8E);
     }
-    for (int i = 0; i < 16; i++)
-    {
+    for (int i = 0; i < 16; i++) {
         createIdtEntry(i + 32, irq_stub_table[i], 0x8E);
     }
 
     flush_idt((uint32_t)&idt_ptr);
-}
-
-void createIdtEntry(int index, void *offset, uint8_t attributes)
-{
-    idt_entries[index].offset_low = (uint32_t)offset & 0xFFFF;
-    idt_entries[index].offset_high = ((uint32_t)offset >> 16) & 0xFFFF;
-    idt_entries[index].segment_selector = 0x08;
-    idt_entries[index].reserved = 0;
-    idt_entries[index].attributes = attributes;
 }
