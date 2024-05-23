@@ -47,6 +47,7 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
     initPit();
     printf("PIT initialized with target frequency of %d Hz\n", TARGET_FREQUENCY);
 
+// TESTING PIT
    /* int counter = 0;
     while (true)
     {
@@ -63,6 +64,13 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
     setColors(RED, 20);
     setColors(BLACK, GRAY);
 
-    printf("Hello World \n");
+// TESTING PRINTING
+/*
+    clearScreen();
+    printf("Hello World from printf \n");
+    terminalWrite("Hello World from terminalWrite");
+    sleep_busy(5000);
+*/
+
     return kernel_main();
 }
