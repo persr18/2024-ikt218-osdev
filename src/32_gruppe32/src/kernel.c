@@ -26,26 +26,21 @@ int kernel_main();
 int main(uint32_t magic, struct multiboot_info *mb_info_addr)
 {
 
+//startup
+    printf("Initializing\n\n");
     gdtInit();
-    
     printf("GDT initialized\n");
-
     initIdt();
-
     printf("IDT initialized\n");
-
     initIrq();
-
-    init_kernel_memory(&end);
-    printf("Kernel memory initialized\n");
-
     init_paging();
-    printf("Paging initialized\n");
-
-    print_memory_layout();
-
     initPit();
-    printf("PIT initialized with target frequency of %d Hz\n", TARGET_FREQUENCY);
+    printf("PIT initialized with target frequency of %d Hz\n\n", TARGET_FREQUENCY);
+    sleep_interrupt(3000);
+    clearScreen();
+    init_kernel_memory(&end);
+    sleep_interrupt(3000);
+
 
 // TESTING PIT
    /* int counter = 0;
@@ -60,9 +55,6 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
         printf("[%d]: Slept using interrupts.\n", counter++);
     }; 
     */
-
-    setColors(RED, 20);
-    setColors(BLACK, GRAY);
 
 // TESTING PRINTING
 /*
