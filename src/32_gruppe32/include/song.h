@@ -30,7 +30,6 @@ void play_sound(uint32_t frequency);
 SongPlayer *create_song_player();
 
 
-// Thanks to ChatGPT for helping making some of these songs.
 static Note music_1[] = {
     {E5, 375}, {B4, 188}, {C5, 188}, {D5, 375}, {C5, 188}, {B4, 188},
     {A4, 375}, {A4, 188}, {C5, 188}, {E5, 375}, {D5, 188}, {C5, 188},
