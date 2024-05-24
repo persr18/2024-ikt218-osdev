@@ -18,8 +18,8 @@
  */
 typedef struct
 {
-    uint8_t status;
-    uint32_t size;
+    uint8_t status; // Allocation status (0 for free, 1 for allocated)
+    uint32_t size;  // Size of the memory block
 } alloc_t;
 
 /* Init Kernel Memory */

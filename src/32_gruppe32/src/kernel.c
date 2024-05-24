@@ -26,28 +26,24 @@ int kernel_main();
 int main(uint32_t magic, struct multiboot_info *mb_info_addr)
 {
 
+//startup
+    printf("Initializing\n\n");
     gdtInit();
-    
     printf("GDT initialized\n");
-
     initIdt();
-
     printf("IDT initialized\n");
-
     initIrq();
-
-    init_kernel_memory(&end);
-    printf("Kernel memory initialized\n");
-
     init_paging();
-    printf("Paging initialized\n");
+    initPit();
+    printf("PIT initialized with target frequency of %d Hz\n\n", TARGET_FREQUENCY);
+    sleep_interrupt(3000);
+    clearScreen();
+    init_kernel_memory(&end);
+    sleep_interrupt(3000);
 
-    print_memory_layout();
 
-    initPit(TARGET_FREQUENCY);
-    printf("PIT initialized with target frequency of %d Hz\n", TARGET_FREQUENCY);
-
-    /* int counter = 0;
+// TESTING PIT
+   /* int counter = 0;
     while (true)
     {
         printf("[%d]: Sleeping with busy-waiting (HIGH CPU).\n", counter);
@@ -57,11 +53,16 @@ int main(uint32_t magic, struct multiboot_info *mb_info_addr)
         printf("[%d]: Sleeping with interrupts (LOW CPU).\n", counter);
         sleep_interrupt(1000);
         printf("[%d]: Slept using interrupts.\n", counter++);
-    }; */
+    }; 
+    */
 
-    setColors(RED, 20);
-    setColors(BLACK, GRAY);
+// TESTING PRINTING
+/*
+    clearScreen();
+    printf("Hello World from printf \n");
+    terminalWrite("Hello World from terminalWrite");
+    sleep_busy(5000);
+*/
 
-    printf("Hello World \n");
     return kernel_main();
 }
