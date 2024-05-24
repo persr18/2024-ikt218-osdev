@@ -4,6 +4,7 @@ extern "C"
 #include <memory.h>
 #include <libc/stdint.h>
 #include <terminal.h>
+#include <pit.h>
 
     int kernel_main();
 }
@@ -46,13 +47,21 @@ void operator delete[](void *ptr, size_t size) noexcept
 int kernel_main()
 {
 
-    terminalWrite("We are now in CPP kernel.\n");
-    // Allocate some memory using the kernel memory manager
-    // THIS IS PART OF THE ASSIGNMENT
+    clearScreen();
+    printf("Memory layout before allocating:\n\n");
+    print_memory_layout();
+    sleep_busy(3000);
+    clearScreen();
+    printf("Allocating memory:\n\n");
     void *some_memory = malloc(12345);
     void *memory2 = malloc(54321);
     void *memory3 = malloc(13331);
     char *memory4 = new char[1000]();
+    sleep_busy(3000);
+    clearScreen();
+    printf("Memory layout after allocating:\n\n");
+    print_memory_layout();
+    sleep_busy(3000);
 
     Song *songs[] = {
         new Song({music_1, sizeof(music_1) / sizeof(Note)}),
@@ -71,16 +80,10 @@ int kernel_main()
     drawCake();
     while (true)
     {
-        // printf("\nPlaying a total of %d songs\n", n_songs);
         for (uint32_t i = 0; i < n_songs; i++)
         {
             printf("\nPlaying song nr: %d of %d\n", i + 1, n_songs);
             player->play_song(songs[i]);
         }
-        break;
     };
-
-    // More code....
-    while (true)
-        ;
 }

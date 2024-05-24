@@ -22,14 +22,6 @@ uint8_t inb(uint16_t port)
     return ret;
 }
 
-/// @brief Wait for an interrupt
-/// @param  
-void wait_for_interrupt(void)
-{
-    __asm__ volatile("sti \n\t"
-                     "hlt");
-}
-
 /// @brief Disable interrupts
 /// @param  
 void cli(void)
